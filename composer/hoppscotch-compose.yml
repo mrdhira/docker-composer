@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  hoppscotch-frontend:
+    image: hoppscotch/hoppscotch-frontend:latest
+    container_name: hoppscotch-frontend
+    # command: "pnpx prisma migrate deploy"
+    restart: unless-stopped
+    ports:
+      - "6001:3000"
+    volumes:
+      - ./../env/hoppscotch.env:/.env
+    networks:
+      - local_network
+
+  hoppscotch-backend:
+    image: hoppscotch/hoppscotch-backend:latest
+    container_name: hoppscotch-backend
+    restart: unless-stopped
+    ports:
+      - "6002:3170"
+    environment:
+      DATABASE_URL: "postgres://hoppscotch_user:hoppscotch_password@postgresql:5432/hoppscotch_db"
+      JWT_SECRET: 'your_jwt_secret'
+    volumes:
+      - ./../env/hoppscotch.env:/.env
+    networks:
+      - local_network
+
+  hoppscotch-admin:
+    image: hoppscotch/hoppscotch-admin:latest
+    container_name: hoppscotch-admin
+    restart: unless-stopped
+    ports:
+      - "6003:3100"
+    environment:
+      ADMIN_SECRET: 'your_admin_secret'
+    volumes:
+      - ./../env/hoppscotch.env:/.env
+    networks:
+      - local_network
+
+networks:
+  local_network:
+    external: true
+    name: local_network

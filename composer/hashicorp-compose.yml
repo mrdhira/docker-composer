@@ -1,0 +1,90 @@
+version: '3.7'
+
+services:
+  consul-server1:
+    image: hashicorp/consul:latest
+    container_name: consul-server1
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+      - 'CONSUL_LOCAL_CONFIG={"leave_on_terminate":true}'
+    command: agent -server -ui -bootstrap-expect=3 -node=server1 -client=0.0.0.0 -retry-join=consul-server2 -retry-join=consul-server3
+    volumes:
+      - consul-server1-data:/consul/data
+      # - ./../consul/config:/consul/config
+    networks:
+      local_network:
+        aliases:
+          - consul-server1
+
+  consul-server2:
+    image: hashicorp/consul:latest
+    container_name: consul-server2
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+      - 'CONSUL_LOCAL_CONFIG={"leave_on_terminate":true}'
+    command: agent -server -node=server2 -client=0.0.0.0 -retry-join=consul-server1 -retry-join=consul-server3
+    volumes:
+      - consul-server2-data:/consul/data
+      # - ./../consul/config:/consul/config
+    networks:
+      local_network:
+        aliases:
+          - consul-server2
+
+  consul-server3:
+    image: hashicorp/consul:latest
+    container_name: consul-server3
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+      - 'CONSUL_LOCAL_CONFIG={"leave_on_terminate":true}'
+    command: agent -server -node=server3 -client=0.0.0.0 -retry-join=consul-server1 -retry-join=consul-server2
+    volumes:
+      - consul-server3-data:/consul/data
+      # - ./../consul/config:/consul/config
+    networks:
+      local_network:
+        aliases:
+          - consul-server3
+
+  consul-client1:
+    image: hashicorp/consul:latest
+    container_name: consul-client1
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: agent -node=client1 -retry-join=consul-server1 -retry-join=consul-server2 -retry-join=consul-server3
+    volumes:
+      - consul-client1-data:/consul/data
+      # - ./../consul/config:/consul/config
+    networks:
+      local_network:
+        aliases:
+          - consul-client1
+
+  consul-client2:
+    image: hashicorp/consul:latest
+    container_name: consul-client2
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: agent -node=client2 -retry-join=consul-server1 -retry-join=consul-server2 -retry-join=consul-server3
+    volumes:
+      - consul-client2-data:/consul/data
+      # - ./../consul/config:/consul/config
+    networks:
+      local_network:
+        aliases:
+          - consul-client2
+
+networks:
+  local_network:
+    external: true
+    name: local_network
+
+volumes:
+  consul-server1-data:
+  consul-server2-data:
+  consul-server3-data:
+  consul-client1-data:
+  consul-client2-data:

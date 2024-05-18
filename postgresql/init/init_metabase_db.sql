@@ -1,4 +1,4 @@
--- Create the Kong database
+-- Create the Metabase database
 CREATE DATABASE metabase_db;
 
 -- Create a new user and set a password
