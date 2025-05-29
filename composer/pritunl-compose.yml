@@ -24,7 +24,7 @@ services:
       - vpn_net
 
   pritunl:
-    image: goofball222/pritunl:latest
+    image: pritunl/pritunl:latest
     container_name: pritunl
     privileged: true
     sysctls:
