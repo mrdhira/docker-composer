@@ -47,7 +47,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./../postgresql/init/:/docker-entrypoint-initdb.d/ # Mount the initialization script
+      - /config/postgresql/init/:/docker-entrypoint-initdb.d/ # Mount the initialization script
     networks:
       - local_network
 
@@ -64,6 +64,7 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - local_network
+
 
 networks:
   local_network:

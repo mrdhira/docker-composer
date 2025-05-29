@@ -1,0 +1,61 @@
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo-pritunl
+    env_file:
+      - mongo.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    volumes:
+      - mongo_data:/data/db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+    networks:
+      - vpn_net
+
+  pritunl:
+    image: goofball222/pritunl:latest
+    container_name: pritunl
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    env_file:
+      - pritunl.env
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - TZ=${TZ}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "1194:1194/udp"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - mongo
+    networks:
+      - vpn_net
+
+networks:
+  vpn_net:
+    driver: overlay # Use overlay for multi-host networking
+
+volumes:
+  mongo-data:
