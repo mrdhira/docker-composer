@@ -3,7 +3,7 @@ services:
     image: mongo:5.0
     container_name: mongo-pritunl
     env_file:
-      - ./config/pritunl/mongo.env
+      - ./../config/pritunl/mongo.env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
@@ -30,7 +30,7 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     env_file:
-      - ./config/pritunl/pritunl.env
+      - ./../config/pritunl/pritunl.env
     environment:
       - MONGODB_URI=${MONGODB_URI}
       - TZ=${TZ}

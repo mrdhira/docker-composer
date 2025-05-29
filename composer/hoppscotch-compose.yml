@@ -9,7 +9,7 @@ services:
     ports:
       - "6001:3000"
     volumes:
-      - ./config/hoppscotch/.env:/.env
+      - ./../config/hoppscotch/.env:/.env
     networks:
       - local_network
 
@@ -23,7 +23,7 @@ services:
       DATABASE_URL: "postgres://hoppscotch_user:hoppscotch_password@postgresql:5432/hoppscotch_db"
       JWT_SECRET: 'your_jwt_secret'
     volumes:
-      - ./config/hoppscotch/.env:/.env
+      - ./../config/hoppscotch/.env:/.env
     networks:
       - local_network
 
@@ -36,7 +36,7 @@ services:
     environment:
       ADMIN_SECRET: 'your_admin_secret'
     volumes:
-      - ./config/hoppscotch/.env:/.env
+      - ./../config/hoppscotch/.env:/.env
     networks:
       - local_network
 
