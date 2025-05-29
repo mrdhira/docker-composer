@@ -89,6 +89,8 @@ docker-pritunl-logs:
 docker-pritunl-logs-f:
 	docker compose -f ./composer/pritunl-compose.yml -p "pritunl" logs -f
 docker-pritunl-stack-deploy:
+	export $(grep -v '^#' ./config/pritunl/mongo.env | xargs)
+	export $(grep -v '^#' ./config/pritunl/pritunl.env | xargs)
 	docker stack deploy -c ./composer/pritunl-compose.yml pritunl
 docker-pritunl-stack-services:
 	docker stack services pritunl
