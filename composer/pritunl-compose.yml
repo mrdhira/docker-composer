@@ -32,7 +32,7 @@ services:
     env_file:
       - ./../config/pritunl/pritunl.env
     environment:
-      - MONGODB_URI=${MONGODB_URI}
+      - MONGO_URI=${MONGO_URI}
       - TZ=${TZ}
     ports:
       - "80:80"
