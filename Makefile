@@ -88,5 +88,7 @@ docker-pritunl-logs:
 	docker compose -f ./composer/pritunl-compose.yml -p "pritunl" logs
 docker-pritunl-logs-f:
 	docker compose -f ./composer/pritunl-compose.yml -p "pritunl" logs -f
-docker-stack-deploy:
+docker-pritunl-stack-deploy:
 	docker stack deploy -c ./composer/pritunl-compose.yml pritunl
+docker-pritunl-stack-services:
+	docker stack services pritunl
